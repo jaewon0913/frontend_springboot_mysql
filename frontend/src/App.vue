@@ -1,98 +1,76 @@
 <template>
   <div id="app">
-    <TodoHeader></TodoHeader>
-    <!-- <TodoInput v-on:하위 컴포넌트에서 발생시킨 이벤트="현재 컴포넌트의 메소드 명"></TodoInput> -->
-    <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
-    <!-- <TodoList v-bind:내려보낼 프롭스 속성 이름 = "현재 위치의 컴포넌트 데이터 속성"></TodoList> -->
-    <TodoList v-bind:propsdata="todoItems" v-on:removeItem="removeOneItem" v-on:toggleItem="toggleOneItem"></TodoList>
-    <TodoFooter v-on:clearAll="clearAllItems"></TodoFooter>
+    <div class="top">
+      <TodoHeader />
+      <div v-if="this.storedName">
+        <TodoTitle />
+        <TodoInput v-on:alertModal="showModal" />
+      </div>
+      <div v-else>
+        <TodoHello />
+      </div>
+    </div>
+    <div class="body">
+      <div v-if="this.storedName">
+        <TodoController />
+        <TodoList />
+      </div>
+      <TodoFooter />
+    </div>
+    <TodoModal v-show="modalVisible" v-on:close="modalVisible = false">
+      <template v-slot:modal-text>{{ modalText }}</template>
+    </TodoModal>
   </div>
 </template>
 
 <script>
-import TodoHeader from './components/TodoHeader.vue'
-import TodoInput from './components/TodoInput.vue'
-import TodoList from './components/TodoList.vue'
-import TodoFooter from './components/TodoFooter.vue'
-
-// var my_cmp = {
-//   template: '<div>my component</div>'
-// };
-
-// new Vue({
-//   el: '',
-//   components: {
-//     'my-cmp': my_cmp
-//   }
-// });
-
-export default {
-  data: function(){
-    return {
-      todoItems: []
-    }
-  },
-  methods: {
-    addOneItem: function(todoItem){
-      var obj = {completed: false, item: todoItem};
-      localStorage.setItem(todoItem, JSON.stringify(obj));
-      this.todoItems.push(obj);
+  import TodoHeader from "./components/TodoHeader";
+  import TodoTitle from "./components/TodoTitle";
+  import TodoInput from "./components/TodoInput";
+  import TodoController from "./components/TodoController";
+  import TodoList from "./components/TodoList";
+  import TodoFooter from "./components/TodoFooter";
+  import TodoModal from "./components/common/TodoModal";
+  import { mapGetters } from "vuex";
+  export default {
+    name: "App",
+    data() {
+      return {
+        modalVisible: false,
+        modalText: ""
+      };
     },
-    removeOneItem: function(todoItem, index){
-      localStorage.removeItem(todoItem.item);
-      this.todoItems.splice(index, 1);
+    computed: {
+      ...mapGetters(["storedName"])
     },
-    toggleOneItem: function(todoItem, index){
-      //todoItem.completed = !todoItem.completed;
-      this.todoItems[index].completed = !this.todoItems[index].completed;
-      localStorage.removeItem(todoItem.item);
-      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-    },
-    clearAllItems: function(){
-      localStorage.clear();
-      this.todoItems = [];
-    }
-  },
-  created: function(){
-    //console.log('created');
-    if (localStorage.length > 0){
-      for (var i = 0; i < localStorage.length; i ++){
-        if (localStorage.key(i) !== 'loglevel:webpack-dev-server'){
-          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-          //this.todoItems.push(localStorage.key(i));
-        }
-        //this.todoItems.push(localStorage.key(i));
-        //console.log(localStorage.key(i));      
+    methods: {
+      showModal(text) {
+        this.modalText = text;
+        this.modalVisible = !this.modalVisible;
       }
+    },
+    components: {
+      TodoHeader,
+      TodoTitle,
+      TodoInput,
+      TodoController,
+      TodoList,
+      TodoFooter,
+      TodoModal
     }
-  },
-  components: {
-    // 컴포넌트 태그명 : 컴포넌트 내용
-    'TodoHeader': TodoHeader,
-    'TodoList': TodoList,
-    'TodoInput': TodoInput,
-    'TodoFooter': TodoFooter
-  }
-  
-}
+  };
 </script>
 
-<style>
-body {
-  text-align: center;
-  background-color: #F6F6F6
-}
-
-input {
-  border-style: groove;
-  width: 80%;
-}
-
-button {
-  border-style: groove;
-}
-
-.shadow {
-  box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.03);
-}
+<style lang="scss">
+  @import "./assets/style/_reset.scss";
+  .top {
+    width: 100%;
+    min-height: 43.6rem;
+    padding: 0 $padding 4.5rem;
+    background-image: linear-gradient(145deg, #3770cc 20%, #ce91c9 84%);
+  }
+  .body {
+    padding: 3rem $padding;
+    background-color: #efefef;
+  }
 </style>
