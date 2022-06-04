@@ -38,12 +38,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../../backend/src/main/resources/templates/vue/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsRoot: path.resolve(__dirname, '../../backend/src/main/resources/static/vue'),
+    assetsSubDirectory: 'static/',
+    assetsPublicPath: 'vue',
 
     /**
      * Source Maps
