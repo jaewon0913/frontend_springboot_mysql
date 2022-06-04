@@ -27,23 +27,19 @@
 import Modal from './common/Modal.vue';
 
 export default {
-    data(){
+    data: function(){
         return {
             newTodoItem: "",
             showModal: false
         }
     },
     methods: {
-        addTodo(){
+        addTodo: function(){
             //console.log(this.newTodoItem);
             //  저장 로직
             if (this.newTodoItem !== ''){
                 // this.$emit('이벤트 이름', 인자);
-                //this.$emit('addTodoItem', this.newTodoItem);
-
-                const text = this.newTodoItem.trim();
-                this.$store.commit('addOnItems', text);
-                
+                this.$emit('addTodoItem', this.newTodoItem);
                 // var obj = {completed: false, item: this.newTodoItem};
                 // localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
 
@@ -54,12 +50,12 @@ export default {
                 this.showModal = !this.showModal;
             }
         },
-        clearInput(){
+        clearInput: function(){
             this.newTodoItem = '';
         }
     },
     components: {
-        Modal
+        Modal: Modal
     }
 }
 </script>
@@ -77,8 +73,10 @@ input:focus {
 }
 
 .inputBox input {
+    width: 80%;
     border-style: none;
     font-size: 0.9rem;
+    padding: 0;
 }
 
 .addContainer {
