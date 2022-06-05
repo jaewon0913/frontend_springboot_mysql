@@ -4,7 +4,7 @@
       <TodoHeader />
       <div v-if="this.storedName">
         <TodoTitle />
-        <TodoInput v-on:alertModal="showModal" />
+        <TodoInput v-on:alertModal="showModal" @reload="reload"/>
       </div>
       <div v-else>
         <TodoHello />
@@ -13,7 +13,7 @@
     <div class="body">
       <div v-if="this.storedName">
         <TodoController />
-        <TodoList />
+        <TodoList ref="list" />
       </div>
       <TodoFooter />
     </div>
@@ -48,6 +48,9 @@ export default {
     showModal(text) {
       this.modalText = text;
       this.modalVisible = !this.modalVisible;
+    },
+    reload(){
+      this.$refs.list.getBoardList();
     }
   },
   components: {

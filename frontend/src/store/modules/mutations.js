@@ -1,22 +1,9 @@
 import getDate from "./../../assets/common/getDate";
 import axios from 'axios';
+import storage from "@/store/modules/storage";
 
 // 아이템 하나 추가
 const addOneItem = async (state, todoItem) => {
-    // var value = {
-    //     item: todoItem,
-    //     date: `${getDate().date} ${getDate().week}`,
-    //     time: getDate().time,
-    //     completed: false
-    // };
-    //
-    // localStorage.setItem(todoItem, JSON.stringify(value));
-    // if (state.todoOldestOrder === false) {
-    //     state.todoItems.unshift(value);
-    // } else {
-    //     state.todoItems.push(value);
-    // }
-
     /* 서버 통신 */
     var jsonValue = {
         item: todoItem,
@@ -30,6 +17,7 @@ const addOneItem = async (state, todoItem) => {
         .then(res => {
             if(res.data == "ok"){
                 console.log("성공");
+                storage.fetch();
             } else {
                 console.log("실패");
             }
@@ -68,7 +56,7 @@ const sortTodoOldest = (state) => {
 }
 // 사용자 이름 추가
 const setUserName = (state, userName) => {
-    localStorage.setItem("userName", userName);
+    //localStorage.setItem("userName", userName);
     state.userName = userName;
 }
 

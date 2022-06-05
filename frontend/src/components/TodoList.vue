@@ -2,7 +2,7 @@
   <transition-group name="list" tag="ul" class="list" v-bind:class="listempty">
     <li
       class="list__item"
-      v-for="(todoItem, index) in this.todoItems"
+      v-for="(todoItem, index) in this.storedTodoItems"
       v-bind:key="todoItem.item"
     >
       <input
@@ -26,46 +26,21 @@
 </template>
 
 <script>
-import axios from "axios";
+import {mapGetters} from "vuex";
 
 export default {
   name: 'todoItems',
-  data(){
-    return {
-      todoItems: []
+  computed: {
+    ...mapGetters(["storedTodoItems", "storedTodoItemsCount"]),
+    listempty() {
+      return this.storedTodoItemsCount <= 0 ? "list--empty" : null;
     }
   },
-  mounted() {
-    this.getBoardList();
-  },
-  // computed: {
-  //   ...mapGetters(["storedTodoItems", "storedTodoItemsCount"]),
-  //   listempty() {
-  //     return this.storedTodoItemsCount <= 0 ? "list--empty" : null;
-  //   }
-  // },
   methods: {
     // ...mapMutations({
     //   removeTodo: "removeOneItem",
     //   toggleComplete: "toggleOneItem"
     // }),
-
-    async getBoardList(){
-      await axios
-        .get('/todos')
-        .then(res => {
-          console.log(res);
-          const jsonData = res.data;
-
-          if(jsonData.length > 0){
-            for(let i = 0 ; i < jsonData.length; i++){
-              this.todoItems = jsonData;
-
-              console.log(this.todoItems);
-            }
-          }
-        });
-    }
   },
 };
 
