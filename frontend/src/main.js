@@ -2,8 +2,13 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { store } from './store/store';
 
-//Vue.config.productionTip = false
+import axios from 'axios';
 
-createApp(App)
-    .use(store)
-    .mount('#app')
+axios.defaults.baseURL = 'http://localhost:8787/';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+const app = createApp(App);
+
+app.config.globalProperties.axios = axios;
+
+app.use(store).mount('#app')

@@ -1,19 +1,39 @@
 import getDate from "./../../assets/common/getDate";
+import axios from 'axios';
 
 // 아이템 하나 추가
-const addOneItem = (state, todoItem) => {
-    var value = {
+const addOneItem = async (state, todoItem) => {
+    // var value = {
+    //     item: todoItem,
+    //     date: `${getDate().date} ${getDate().week}`,
+    //     time: getDate().time,
+    //     completed: false
+    // };
+    //
+    // localStorage.setItem(todoItem, JSON.stringify(value));
+    // if (state.todoOldestOrder === false) {
+    //     state.todoItems.unshift(value);
+    // } else {
+    //     state.todoItems.push(value);
+    // }
+
+    /* 서버 통신 */
+    var jsonValue = {
         item: todoItem,
         date: `${getDate().date} ${getDate().week}`,
         time: getDate().time,
         completed: false
-    };
-    localStorage.setItem(todoItem, JSON.stringify(value));
-    if (state.todoOldestOrder === false) {
-        state.todoItems.unshift(value);
-    } else {
-        state.todoItems.push(value);
     }
+
+    await axios
+        .post('/todos/save', JSON.stringify(jsonValue))
+        .then(res => {
+            if(res.data == "ok"){
+                console.log("성공");
+            } else {
+                console.log("실패");
+            }
+        });
 }
 // 아이템 하나 삭제
 const removeOneItem = (state, payload) => {

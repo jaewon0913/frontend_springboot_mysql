@@ -25,20 +25,17 @@
 <script>
     import {mapMutations} from "vuex";
     export default {
-    data() {
-    return {
-    userName: ""
-};
-},
-    methods: {
-    ...mapMutations({
-    addUserName: "setUserName"
-})
-    // addUserName() {
-    //   this.$store.commit("setUserName", this.userName);
-    // }
-}
-};
+        data() {
+            return {
+                userName: ""
+            };
+        },
+        methods: {
+            ...mapMutations({
+                addUserName: "setUserName"
+            })
+        }
+    };
 </script>
 
 <style lang="scss">
