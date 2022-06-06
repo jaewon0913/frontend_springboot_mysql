@@ -1,16 +1,15 @@
 package com.springboot.backend.controller;
 
-import com.springboot.backend.address.Todo;
+import com.springboot.backend.model.Todo;
 import com.springboot.backend.service.TodoService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,19 +20,68 @@ public class TodoController {
 
     private final TodoService todoService;
 
+    /**
+     * Todo 등록
+     * @return
+     */
     @PostMapping("/todos/save")
     public String createJsonTodo(@RequestBody @Valid TodoForm form, BindingResult bindingResult){
         log.info("Post : Todo Save");
-        log.info("TodoForm : " + form);
 
         return validation(form, bindingResult);
     }
 
+    /**
+     * Todo 목록
+     * @return
+     */
     @GetMapping("/todos")
     public List<Todo> list(){
         log.info("Get : Todos List");
 
         return todoService.findTodos();
+    }
+
+    /**
+     * Todo 완료 상태 업데이트
+     * @return
+     */
+    @PutMapping("/todos/{id}")
+    public String updateTodo(
+            @PathVariable("id") Long id,
+            @RequestBody UpdateTodoRequest request
+    ){
+        log.info("Put : Todo update");
+
+        todoService.updateTodoComplted(id, request.isCompleted());
+
+        Todo findTodo = todoService.findOne(id);
+
+        if(request.isCompleted() == findTodo.isCompleted()){
+            return "ok";
+        } else {
+            return "fail";
+        }
+    }
+
+    /**
+     * Todo 삭제(DB 업데이트)
+     */
+    @PutMapping("/todos/delete/{id}")
+    public String deleteTodo(
+            @PathVariable("id") Long id
+    ){
+        log.info("Delete : Todo Delete");
+
+        todoService.updateTodoUseYn(id);
+
+        Todo findTodo = todoService.findOne(id);
+
+        if(findTodo.getUseYn().equals("N")){
+            return "ok";
+        } else {
+            return "fail";
+        }
     }
 
     private String validation(@Valid @RequestBody TodoForm form, BindingResult bindingResult) {
@@ -53,5 +101,14 @@ public class TodoController {
         todoService.save(todo);
 
         return "ok";
+    }
+
+    @Data
+    static class UpdateTodoRequest{
+
+        private Long id;
+        @NotEmpty
+        private boolean completed;
+
     }
 }

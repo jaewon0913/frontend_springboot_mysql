@@ -1,6 +1,6 @@
 package com.springboot.backend.repository;
 
-import com.springboot.backend.address.Todo;
+import com.springboot.backend.model.Todo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +25,9 @@ public class TodoRepository {
 
     // 전체 조회
     public List<Todo> findAll(){
-        return em.createQuery("select t from Todo t", Todo.class)
+        return em.createQuery(
+                "select t from Todo t" +
+                        " where t.useYn = 'Y'", Todo.class)
                 .getResultList();
     }
 }
