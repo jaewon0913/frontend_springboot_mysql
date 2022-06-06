@@ -2,12 +2,20 @@ import axios from 'axios';
 import {store} from "@/store/store";
 
 const storage = {
-    async fetch() {
+    async fetch(orderState) {
+        var setState = true;
         /* 서버 통신 */
         const arr = [];
 
+        if(orderState == undefined || orderState === null){
+            setState == true;
+        }
+        else if(orderState != null || orderState != ""){
+            setState = orderState;
+        }
+
         await axios
-            .get('/todos')
+            .get('/todos/' + setState)
             .then(res => {
                const jsonData = res.data;
 
@@ -21,8 +29,6 @@ const storage = {
             });
 
         store.state.todoItems = arr;
-
-        return arr;
     },
     fetchName() {
         // 로컬 스토리지의 사용자 이름 가져오기

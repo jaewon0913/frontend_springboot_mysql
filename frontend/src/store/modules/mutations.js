@@ -16,7 +16,7 @@ const addOneItem = async (state, todoItem) => {
         .post('/todos/save', JSON.stringify(jsonValue))
         .then(res => {
             if(res.data == "ok"){
-                storage.fetch();
+                storage.fetch(state.todoOldestOrder);
             } else {
                 alert("등록 실패");
             }
@@ -29,7 +29,7 @@ const removeOneItem = (state, payload) => {
         .put('/todos/delete/' + payload.todoItem.id)
         .then(res => {
             if(res.data == "ok"){
-                storage.fetch();
+                storage.fetch(state.todoOldestOrder);
             } else {
                 alert("삭제 실패");
             }
@@ -50,7 +50,7 @@ const toggleOneItem = (state, payload) => {
         .put('/todos/' + payload.todoItem.id, JSON.stringify(jsonValue))
         .then(res => {
            if(res.data == "ok"){
-               storage.fetch();
+               storage.fetch(state.todoOldestOrder);
            } else {
                alert("업데이트 실패");
            }
@@ -61,28 +61,34 @@ const toggleOneItem = (state, payload) => {
 }
 // 모든 아이템 삭제
 const clearAllItem = (state) => {
-    const name = state.userName;
-    state.todoItems = [];
-    localStorage.clear();
-    localStorage.setItem("userName", name);
+    var todoItems = state.todoItems;
+    if(todoItems.length > 0){
+        axios
+            .put('/todos/clear')
+            .then(res => {
+                if(res.data == "ok"){
+                    storage.fetch(state.todoOldestOrder);
+                } else {
+                    alert("클리어 실패");
+                }
+            });
+    }
 }
 // 최신순 정렬
 const sortTodoLatest = (state) => {
     state.todoOldestOrder = false;
-    state.todoItems.sort(function (a, b) {
-        return b.time - a.time;
-    });
+
+    storage.fetch(state.todoOldestOrder);
 }
 // 오래된 순 정렬
 const sortTodoOldest = (state) => {
     state.todoOldestOrder = true;
-    state.todoItems.sort(function (a, b) {
-        return a.time - b.time;
-    });
+
+    storage.fetch(state.todoOldestOrder);
 }
 // 사용자 이름 추가
 const setUserName = (state, userName) => {
-    //localStorage.setItem("userName", userName);
+    localStorage.setItem("userName", userName);
     state.userName = userName;
 }
 
