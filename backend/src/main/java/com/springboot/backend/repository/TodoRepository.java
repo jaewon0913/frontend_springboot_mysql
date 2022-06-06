@@ -2,14 +2,10 @@ package com.springboot.backend.repository;
 
 import com.springboot.backend.model.Todo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -49,8 +45,11 @@ public class TodoRepository {
     }
 
     // 전체 업데이트
-    @Modifying
-    @Query(value = "UPDATE Todo t set t.useYn = 'N' WHERE t.useYn = 'Y'", nativeQuery = true)
-    public void updateTodoAllClear() {
+    public int updateTodoAllClear() {
+        return em.createQuery(
+                "update Todo t " +
+                        " set t.useYn = 'N' " +
+                        " where t.useYn = 'Y'")
+                .executeUpdate();
     }
 }

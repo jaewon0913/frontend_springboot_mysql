@@ -88,9 +88,13 @@ public class TodoController {
     public String clearAllTodo(){
         log.info("Clear : Todo All Clear");
 
-        todoService.updateTodoAllClear();
+        int result = todoService.updateTodoAllClear();
 
-        return "ok";
+        if(result > 0){
+            return "ok";
+        } else {
+            return "fail";
+        }
     }
 
     private String validation(@Valid @RequestBody TodoForm form, BindingResult bindingResult) {

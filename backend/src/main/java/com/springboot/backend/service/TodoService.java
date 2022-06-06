@@ -63,7 +63,7 @@ public class TodoService {
      * Todo 전체 삭제(DB 업데이트)
      */
     @Transactional
-    public void updateTodoAllClear() {
-        todoRepository.updateTodoAllClear();
+    public int updateTodoAllClear() {
+        return todoRepository.updateTodoAllClear();
     }
 }
