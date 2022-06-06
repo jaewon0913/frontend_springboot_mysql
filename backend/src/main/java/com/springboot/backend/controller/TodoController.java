@@ -35,11 +35,11 @@ public class TodoController {
      * Todo 목록
      * @return
      */
-    @GetMapping("/todos")
-    public List<Todo> list(){
+    @GetMapping("/todos/{orderState}")
+    public List<Todo> list(@PathVariable("orderState") Boolean orderState){
         log.info("Get : Todos List");
 
-        return todoService.findTodos();
+        return todoService.findTodos(orderState);
     }
 
     /**
@@ -82,6 +82,15 @@ public class TodoController {
         } else {
             return "fail";
         }
+    }
+
+    @PutMapping("/todos/clear")
+    public String clearAllTodo(){
+        log.info("Clear : Todo All Clear");
+
+        todoService.updateTodoAllClear();
+
+        return "ok";
     }
 
     private String validation(@Valid @RequestBody TodoForm form, BindingResult bindingResult) {

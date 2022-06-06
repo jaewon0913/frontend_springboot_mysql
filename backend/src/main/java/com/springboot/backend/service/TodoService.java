@@ -28,8 +28,8 @@ public class TodoService {
     /**
      * Todo 전체 조회
      */
-    public List<Todo> findTodos(){
-        return todoRepository.findAll();
+    public List<Todo> findTodos(boolean orderState){
+        return todoRepository.findAll(orderState);
     }
 
     /**
@@ -57,5 +57,13 @@ public class TodoService {
         Todo todo = todoRepository.findOne(id);
 
         todo.setUseYn("N");
+    }
+
+    /**
+     * Todo 전체 삭제(DB 업데이트)
+     */
+    @Transactional
+    public void updateTodoAllClear() {
+        todoRepository.updateTodoAllClear();
     }
 }
