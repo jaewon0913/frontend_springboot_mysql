@@ -13,7 +13,6 @@ const storage = {
 
                if(jsonData.length > 0){
                    for(let i = 0 ; i < jsonData.length; i++){
-                       console.log(jsonData[i]);
                        arr.push(
                            jsonData[i]
                        );

@@ -16,22 +16,48 @@ const addOneItem = async (state, todoItem) => {
         .post('/todos/save', JSON.stringify(jsonValue))
         .then(res => {
             if(res.data == "ok"){
-                console.log("성공");
                 storage.fetch();
             } else {
-                console.log("실패");
+                alert("등록 실패");
             }
         });
 }
 // 아이템 하나 삭제
 const removeOneItem = (state, payload) => {
-    localStorage.removeItem(payload.todoItem.item);
-    state.todoItems.splice(payload.index, 1);
+    /* 서버 통신 */
+    axios
+        .put('/todos/delete/' + payload.todoItem.id)
+        .then(res => {
+            if(res.data == "ok"){
+                storage.fetch();
+            } else {
+                alert("삭제 실패");
+            }
+        });
+
+    // localStorage.removeItem(payload.todoItem.item);
+    // state.todoItems.splice(payload.index, 1);
 }
 // 아이템 하나 완료 토글
 const toggleOneItem = (state, payload) => {
-    payload.todoItem.completed = !payload.todoItem.completed;
-    localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
+    /* 서버 통신 */
+    var jsonValue = {
+        id: payload.todoItem.id,
+        completed: !payload.todoItem.completed
+    }
+
+    axios
+        .put('/todos/' + payload.todoItem.id, JSON.stringify(jsonValue))
+        .then(res => {
+           if(res.data == "ok"){
+               storage.fetch();
+           } else {
+               alert("업데이트 실패");
+           }
+        });
+
+    // payload.todoItem.completed = !payload.todoItem.completed;
+    // localStorage.setItem(payload.todoItem.item, JSON.stringify(payload.todoItem));
 }
 // 모든 아이템 삭제
 const clearAllItem = (state) => {

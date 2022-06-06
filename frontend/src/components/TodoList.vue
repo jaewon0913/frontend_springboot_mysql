@@ -27,6 +27,7 @@
 
 <script>
 import {mapGetters} from "vuex";
+import {mapMutations} from "vuex";
 
 export default {
   name: 'todoItems',
@@ -37,10 +38,10 @@ export default {
     }
   },
   methods: {
-    // ...mapMutations({
-    //   removeTodo: "removeOneItem",
-    //   toggleComplete: "toggleOneItem"
-    // }),
+    ...mapMutations({
+      removeTodo: "removeOneItem",
+      toggleComplete: "toggleOneItem"
+    }),
   },
 };
 
