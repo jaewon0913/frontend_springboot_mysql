@@ -1,9 +1,9 @@
-### Vue + SpringBoot + MySQL
+### FrontEnd + SpringBoot + MySQL
 
 #### 개발환경
 * IDE : IntelliJ IDEA  
 * OS : MAC OS  
-* FrontEnd : Vue.js(4.5.12)
+* FrontEnd : Vue.js(4.5.12) / React,TypeScript
 * BackEnd : SpringBoot(2.4.4)
 * DataBase : MySql
 * Java(11)  
