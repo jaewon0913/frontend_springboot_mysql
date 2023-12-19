@@ -1,14 +1,11 @@
-import TodoList from "./components/TodoList";
+import React from 'react';
 import './App.css';
-
-function App() {
-
-  return (
-    <div className="App">
-        <h1>React + TypeScript TodoList</h1>
-        <TodoList />
-    </div>
-  );
+import TodoList from './components/TodoList';
+const App = () => {
+    return (
+        <>
+            <TodoList/>
+        </>
+    );
 }
-
 export default App;
